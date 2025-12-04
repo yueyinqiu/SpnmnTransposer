@@ -125,6 +125,8 @@ internal record class Note(NoteNumeric Numeric, int OctaveOffset, int KeyOffsetT
 
     public static Note Parse(string s)
     {
+        s = s.Trim();
+
         int keyOffset = 0;
         int i = 0;
 

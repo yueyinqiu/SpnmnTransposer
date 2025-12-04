@@ -21,10 +21,25 @@ var lines = new List<List<NoteAndStringBuilder>>();
 
         result.Add(new NoteAndStringBuilder() { stringBuilder = new() });
         
-        // 碰到了 [$] 会被识别成升半调的问题
         int squareBracket = 0;
         foreach (var c in line)
         {
+            // 忽略所有 [] 里的内容。虽然会导致一些问题，但这个处理起来太复杂了。 
+            if (squareBracket > 0)
+            {
+                switch (c)
+                {
+                    case '[':
+                        squareBracket++;
+                        break;
+                    case ']':
+                        squareBracket--;
+                        break;
+                }
+                result[^1].stringBuilder.Add(c);
+                continue;
+            }
+
             switch (c)
             {
                 case '|':
@@ -43,13 +58,8 @@ var lines = new List<List<NoteAndStringBuilder>>();
                     keyOffset.RecordAccidental(0);
                     break;
                 case '$':
-                {
-                    if (squareBracket > 0)
-                        goto default;
-
                     keyOffset.RecordAccidental(1);
                     break;
-                }
                 case '%':
                     keyOffset.RecordAccidental(-1);
                     break;
@@ -76,9 +86,6 @@ var lines = new List<List<NoteAndStringBuilder>>();
                 }
                 case '[':
                     squareBracket++;
-                    goto default;
-                case ']':
-                    squareBracket--;
                     goto default;
                 default:
                     result[^1].stringBuilder.Add(c);
@@ -155,5 +162,7 @@ var conversion = new Dictionary<Note, Note>();
     Console.WriteLine();
     Console.WriteLine();
     Console.WriteLine();
-    Console.WriteLine("注意程序只处理了 N: 部分，并且可能存在没有考虑的边界情况，需要人工确认。");
+    Console.WriteLine("注意程序可能存在没有考虑的边界情况，需要人工确认。已知问题：");
+    Console.WriteLine("一、非 N: 开头的行会保持原样，因此不会处理 Ns");
+    Console.WriteLine("二、中括号中的内容会保持原样，因此不会处理倚音");
 }
