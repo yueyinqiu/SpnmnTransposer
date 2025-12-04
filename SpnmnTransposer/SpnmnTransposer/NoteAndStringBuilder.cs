@@ -9,5 +9,5 @@ namespace SpnmnTransposer;
 internal class NoteAndStringBuilder
 {
     public Note? note;
-    public required StringBuilder stringBuilder;
+    public required List<char> stringBuilder;
 }

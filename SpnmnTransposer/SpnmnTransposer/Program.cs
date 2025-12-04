@@ -81,7 +81,7 @@ var lines = new List<List<NoteAndStringBuilder>>();
                     squareBracket--;
                     goto default;
                 default:
-                    result[^1].stringBuilder.Append(c);
+                    result[^1].stringBuilder.Add(c);
                     break;
             }
         }
@@ -133,7 +133,7 @@ var conversion = new Dictionary<Note, Note>();
                 Console.Write(keyOffset.WriteNote(conversion[noteAndString.note]));
             }
 
-            foreach (var c in noteAndString.stringBuilder.ToString())
+            foreach (var c in noteAndString.stringBuilder)
             {
                 Console.Write(c);
                 switch (c)
